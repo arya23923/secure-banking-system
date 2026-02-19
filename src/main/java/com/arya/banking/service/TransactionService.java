@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
 import com.arya.banking.entity.Account;
-import com.arya.banking.repository.AccountRepository;
 import com.arya.banking.repository.TransactionRepository;
 
 import jakarta.transaction.Transactional;

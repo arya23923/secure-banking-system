@@ -17,14 +17,14 @@ import com.arya.banking.entity.Transaction;
 @Service
 @RequiredArgsConstructor
 public class TransactionService {
-    private final AccountRepository accountRepo;
+    private final AccountService accountService;
     private final TransactionRepository transactionRepo;
 
     @Transactional
     public String transfer(UUID fromId, UUID toId, BigDecimal amount) {
 
-        Account from = accountRepo.findById(fromId).orElseThrow();
-        Account to = accountRepo.findById(toId).orElseThrow();
+        Account from = accountService.getAccount(fromId);
+        Account to = accountService.getAccount(toId);
 
         if (from.getBalance().compareTo(amount) < 0)
             throw new RuntimeException("Insufficient balance");
@@ -32,8 +32,8 @@ public class TransactionService {
         from.setBalance(from.getBalance().subtract(amount));
         to.setBalance(to.getBalance().add(amount));
 
-        accountRepo.save(from);
-        accountRepo.save(to);
+        accountService.updateBalance(from, from.getBalance());
+        accountService.updateBalance(to, to.getBalance());
 
         Transaction tx = new Transaction();
         tx.setFromAccountId(fromId);

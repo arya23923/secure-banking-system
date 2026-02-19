@@ -23,7 +23,7 @@ public class Transaction {
     private UUID fromAccountId;
     private UUID toAccountId;
 
-    private BigDecimal amoiunt;
+    private BigDecimal amount;
 
     private String status;
 

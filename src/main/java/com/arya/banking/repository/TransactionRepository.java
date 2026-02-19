@@ -1,5 +1,8 @@
 package com.arya.banking.repository;
 
-public interface TransactionRepository {
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.arya.banking.entity.Transaction;
 
+public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 }

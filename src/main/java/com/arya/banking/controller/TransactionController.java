@@ -26,23 +26,24 @@ public class TransactionController {
             @RequestHeader("Idempotency-Key") String key,
             @RequestBody TransferRequest request) {
 
-        if (idempotencyRepo.existsById(key)) {
+        try {
+            String response = transactionService.transfer(
+                    request.getFrom(),
+                    request.getTo(),
+                    request.getAmount()
+            );
+
+            IdempotencyKey idk = new IdempotencyKey();
+            idk.setKey(key);
+            idk.setResponse(response);
+            idempotencyRepo.save(idk);
+
+            return ResponseEntity.ok(response);
+
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
             return ResponseEntity.ok(
                     idempotencyRepo.findById(key).get().getResponse()
             );
         }
-
-        String response = transactionService.transfer(
-                request.getFrom(),
-                request.getTo(),
-                request.getAmount()
-        );
-
-        IdempotencyKey idk = new IdempotencyKey();
-        idk.setKey(key);
-        idk.setResponse(response);
-        idempotencyRepo.save(idk);
-
-        return ResponseEntity.ok(response);
-    }
+}
 }

@@ -21,6 +21,7 @@ public class AuthService {
     private final JwtService jwtService;
 
     public String register(RegisterRequest request) {
+
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -28,7 +29,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        return "User registered";
+        return "User registered successfully";
     }
 
     public String login(LoginRequest request) {
